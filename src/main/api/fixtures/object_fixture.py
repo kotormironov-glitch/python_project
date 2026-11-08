@@ -3,8 +3,8 @@ from typing import List, Any
 
 import pytest
 
-from classes.api_manager import ApiManager
-from models.create_account_response import CreateAccountResponse
+from src.main.api.classes.api_manager import ApiManager
+from src.main.api.models.create_account_response import CreateAccountResponse
 
 
 @pytest.fixture

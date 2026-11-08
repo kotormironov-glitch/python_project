@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, ForeignKey, String, Float, TIMESTAMP
-from db.base import Base
+from src.main.api.db.base import Base
 
 
 class Credit(Base):

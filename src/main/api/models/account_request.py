@@ -1,12 +1,12 @@
 from typing import Annotated
-from generators.creation_rule import CreationRule
+from src.main.api.generators.creation_rule import CreationRule
 from src.main.api.models.base_model import BaseModel
 
 class DepositRequest(BaseModel):
     accountId: int
-    amount: Annotated[float, CreationRule(refex=r'^[1000-9000]$')]
+    amount: Annotated[float, CreationRule(regex=r'^(?:[1-8][0-9]{3}|9000)$')]
 
 class TransferRequest(BaseModel):
     fromAccountId: int
     toAccountId: int
-    amount: Annotated[float, CreationRule(refex=r'^[500-10000]$')]
+    amount: Annotated[float, CreationRule(regex=r'^(?:[5-9][0-9]{2}|[1-9][0-9]{3}|10000)$')]

@@ -1,61 +1,61 @@
 import pytest
+import random
+
 from sqlalchemy.orm import Session
-from classes.api_manager import ApiManager
-from generators.model_generator import RandomModelGenerator
+from src.main.api.classes.api_manager import ApiManager
 from src.main.api.models.account_request import DepositRequest, TransferRequest
-from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.api.db.crud.account_crud import AccountCrudDb as Account
 from src.main.api.db.crud.transaction_crud import TransactionCrudDb as Transaction
 
 @pytest.mark.api
 class TestDepositAccount:
-    @pytest.mark.parametrize(
-        "create_user_request",
-        [RandomModelGenerator.generate(CreateUserRequest)]
-    )
-    def test_deposit_account(self, db_session: Session, api_manager: ApiManager, create_user_request: CreateUserRequest):
-        api_manager.admin_steps.create_user(create_user_request)
-        create_account_response = api_manager.user_steps.create_account(create_user_request)
+    def test_deposit_account(
+            self,
+            db_session: Session,
+            api_manager: ApiManager,
+            user,
+            account,
+            deposit_request,
+            amount
+    ):
+        response = api_manager.user_steps.to_deposit(user, deposit_request)
 
-        response = api_manager.user_steps.to_deposit(create_user_request, DepositRequest(accountId=create_account_response.id, amount=1000.5))
+        assert response.balance == amount
+        assert response.id == account.id
 
-        assert response.balance == 1000.5
-        assert response.id == create_account_response.id
-
-        deposit_from_db = Account.get_account_by_id(db_session, create_account_response.id)
+        deposit_from_db = Account.get_account_by_id(db_session, account.id)
         assert deposit_from_db.balance == response.balance, 'Депозин не был внесен'
 
-    def test_transfer_account(self, db_session: Session, before_test_transfer_account, api_manager: ApiManager):
-        response1, response2, role_1, role_2 = before_test_transfer_account
+    def test_transfer_account(self,db_session: Session, before_test_transfer_account, api_manager: ApiManager):
+        response1, response2, role_1, role_2, transfer_model, deposit1_amount_after = before_test_transfer_account
 
-        transfer_request = TransferRequest(fromAccountId=response1.id, toAccountId=response2.id, amount=500.75)
-
-        result = api_manager.user_steps.to_transfer(role_1, transfer_request)
+        result = api_manager.user_steps.to_transfer(role_1, transfer_model)
 
         assert result.fromAccountId == response1.id
         assert result.toAccountId == response2.id
-        assert result.fromAccountIdBalance == 499.75
+        assert result.fromAccountIdBalance == deposit1_amount_after
 
         transfer_from_db = Transaction.get_transaction_from_account_id(db_session, response1.id)
         assert transfer_from_db.from_account_id == response1.id, "Запись с переводом не создалась"
 
-    def test_invalid_deposit_account(self, db_session: Session, api_manager: ApiManager, create_user_request: CreateUserRequest):
-        amount = 999
+    def test_invalid_deposit_account(
+            self,
+            db_session: Session,
+            api_manager: ApiManager,
+            user,
+            account
+    ):
+        amount = random.choice([-1, 0, 1, 999, 9001])
+        response = api_manager.user_steps.to_deposit_invalid(user, DepositRequest(accountId=account.id, amount=amount))
 
-        api_manager.admin_steps.create_user(create_user_request)
-        create_account_response = api_manager.user_steps.create_account(create_user_request)
+        assert response.text == '{"error":"Amount must be between 1000 and 9000"}'
+        deposit_from_db = Account.get_account_by_id(db_session, account.id)
 
-        response = api_manager.user_steps.to_deposit(create_user_request, DepositRequest(accountId=create_account_response.id, amount=amount))
-
-        assert response.balance == amount
-        assert response.id == create_account_response.id
-
-        deposit_from_db = Account.get_account_by_id(db_session, create_account_response.id)
-        assert deposit_from_db.balance == response.balance, 'Депозин не был внесен'
+        assert deposit_from_db.balance == account.balance, 'Депозин не был внесен'
 
     def test_invalid_transfer_account(self, db_session: Session, before_test_transfer_account, api_manager: ApiManager):
         amount = 0
-        response1, response2, role1, role2 = before_test_transfer_account
+        response1, response2, role1, role2, _, _ = before_test_transfer_account
 
         transfer_response = TransferRequest(fromAccountId=response1.id, toAccountId=response2.id, amount=amount)
 

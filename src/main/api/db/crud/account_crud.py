@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from db.models.account_table import Account
+from src.main.api.db.models.account_table import Account
 
 
 class AccountCrudDb:

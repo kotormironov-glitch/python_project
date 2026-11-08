@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from db.models.transaction_table import Transaction
+from src.main.api.db.models.transaction_table import Transaction
 
 
 class TransactionCrudDb:

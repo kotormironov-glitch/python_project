@@ -1,6 +1,6 @@
 import pytest
 
-from fixtures.user_fixture import create_user_request
+from src.main.api.fixtures.user_fixture import create_user_request
 from src.main.api.models.login_user_request import LoginUserRequest
 
 @pytest.mark.api

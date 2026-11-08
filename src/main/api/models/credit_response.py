@@ -1,12 +1,12 @@
 from src.main.api.models.base_model import BaseModel
 
 class CreditResponse(BaseModel):
-    account_id: int
+    id: int
     amount: int
-    term_months: int
+    termMonths: int
     balance: int
-    credit_id: int
+    creditId: int
 
 class CreditRepayResponse(BaseModel):
-    credit_id: int
-    amount_deposited: int
+    creditId: int
+    amountDeposited: int
