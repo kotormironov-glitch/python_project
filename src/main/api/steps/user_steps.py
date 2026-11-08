@@ -1,10 +1,10 @@
 from typing import Any, Optional, Literal
 
-from foundation.endpoint import Endpoint
-from foundation.requesters.validate_crud_requester import ValidateCrudRequester
-from models.create_user_request import CreateUserRequest
-from specs.request_specs import RequestSpecs
-from specs.response_specs import ResponseSpecs
+from src.main.api.foundation.endpoint import Endpoint
+from src.main.api.foundation.requesters.validate_crud_requester import ValidateCrudRequester
+from src.main.api.models.create_user_request import CreateUserRequest
+from src.main.api.specs.request_specs import RequestSpecs
+from src.main.api.specs.response_specs import ResponseSpecs
 from src.main.api.steps.base_steps import BaseSteps
 
 
@@ -37,6 +37,14 @@ class UserSteps(BaseSteps):
             body
         )
 
+    def to_deposit_invalid(self, create_user_request: CreateUserRequest, body: Any):
+        return self.to_send_request(
+            create_user_request,
+            Endpoint.TO_DEPOSIT,
+            ResponseSpecs.request_bad(),
+            body
+        )
+
     def to_transfer(self, create_user_request: CreateUserRequest, body: Any):
         return self.to_send_request(
             create_user_request,
@@ -53,11 +61,19 @@ class UserSteps(BaseSteps):
             body
         )
 
-    def to_credite(self, create_user_request: CreateUserRequest, body: Any):
+    def to_credit(self, create_user_request: CreateUserRequest, body: Any):
         return self.to_send_request(
             create_user_request,
-            Endpoint.TO_DEPOSIT,
+            Endpoint.TO_CREDIT,
             ResponseSpecs.request_created(),
+            body
+        )
+
+    def to_credit_invalid(self, create_user_request: CreateUserRequest, body: Any):
+        return self.to_send_request(
+            create_user_request,
+            Endpoint.TO_CREDIT,
+            ResponseSpecs.request_bad(),
             body
         )
 
@@ -66,5 +82,13 @@ class UserSteps(BaseSteps):
             create_user_request,
             Endpoint.TO_REPAY,
             ResponseSpecs.request_ok(),
+            body
+        )
+
+    def to_repay_invalid(self, create_user_request: CreateUserRequest, body: Any):
+        return self.to_send_request(
+            create_user_request,
+            Endpoint.TO_REPAY,
+            ResponseSpecs.request_unprocessable_content(),
             body
         )

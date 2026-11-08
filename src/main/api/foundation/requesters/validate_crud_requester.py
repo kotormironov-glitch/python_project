@@ -2,7 +2,7 @@ from typing import Optional
 
 import allure
 
-from foundation.requesters.crud_requester import CrudRequester
+from src.main.api.foundation.requesters.crud_requester import CrudRequester
 from src.main.api.foundation.http_requester import HttpRequester
 from src.main.api.models.base_model import BaseModel
 from src.main.api.configs.config import Config

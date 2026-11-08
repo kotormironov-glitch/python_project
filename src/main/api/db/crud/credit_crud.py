@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from db.models.credit_table import Credit
+from src.main.api.db.models.credit_table import Credit
 
 
 class CreditCrudDb:

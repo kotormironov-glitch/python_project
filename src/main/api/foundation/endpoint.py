@@ -2,13 +2,13 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Optional, Type
 
-from models.account_request import DepositRequest, TransferRequest
-from models.account_response import DepositResponse, TransferResponse
-from models.create_account_response import CreateAccountResponse
-from models.credit_request import CreditRequest, CreditRepayRequest
-from models.credit_response import CreditResponse, CreditRepayResponse
-from models.login_user_request import LoginUserRequest
-from models.login_user_response import LoginUserResponse
+from src.main.api.models.account_request import DepositRequest, TransferRequest
+from src.main.api.models.account_response import DepositResponse, TransferResponse
+from src.main.api.models.create_account_response import CreateAccountResponse
+from src.main.api.models.credit_request import CreditRequest, CreditRepayRequest
+from src.main.api.models.credit_response import CreditResponse, CreditRepayResponse
+from src.main.api.models.login_user_request import LoginUserRequest
+from src.main.api.models.login_user_response import LoginUserResponse
 from src.main.api.models.base_model import BaseModel
 from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.api.models.create_user_response import CreateUserResponse

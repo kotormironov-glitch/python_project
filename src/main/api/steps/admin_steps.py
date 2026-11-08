@@ -1,4 +1,4 @@
-from models.login_user_request import LoginUserRequest
+from src.main.api.models.login_user_request import LoginUserRequest
 from src.main.api.foundation.endpoint import Endpoint
 from src.main.api.foundation.requesters.crud_requester import CrudRequester
 from src.main.api.foundation.requesters.validate_crud_requester import ValidateCrudRequester

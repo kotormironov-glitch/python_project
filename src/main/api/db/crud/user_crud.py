@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from db.models.user_table import User
+from src.main.api.db.models.user_table import User
 
 
 class UserCrudDb:
